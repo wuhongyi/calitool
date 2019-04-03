@@ -4,9 +4,9 @@
 // Author: Hongyi Wu(吴鸿毅)
 // Email: wuhongyi@qq.com 
 // Created: 六 2月  9 21:18:25 2019 (+0800)
-// Last-Updated: 日 2月 10 19:34:22 2019 (+0800)
+// Last-Updated: 三 4月  3 21:33:56 2019 (+0800)
 //           By: Hongyi Wu(吴鸿毅)
-//     Update #: 45
+//     Update #: 51
 // URL: http://wuhongyi.cn 
 
 #include "caliMainFrame.hh"
@@ -34,7 +34,7 @@ caliMainFrame::caliMainFrame()
 {
   fHist1 = NULL;
   fHist2 = NULL;
-
+  autocali = NULL;
 
   // gStyle->SetOptStat(0);
   MainFrame();
@@ -358,39 +358,68 @@ void caliMainFrame::DrawEnergySpectrum()
 void caliMainFrame::DoCombo(Int_t id)
 {
   std::cout<<id<<std::endl;
-  std::cout<<"该功能当前无效！"<<std::endl;
+  std::cout<<"This feature is currently invalid!"<<std::endl;
+}
+
+void caliMainFrame::FitData()
+{
+  TGraph *gg = new TGraph;
+  for (int i = 0; i < CALIPOINTNUMBER; ++i)
+    {
+      if(coordxycb[i]->IsOn())
+	{
+	  TString xx(coordx[i]->GetText());
+	  TString yy(coordy[i]->GetText());
+	  std::cout<<xx.Atof()<<"  "<<yy.Atof()<<std::endl;
+		
+	  gg->SetPoint(gg->GetN(),xx.Atof(),yy.Atof());
+	}
+    }
+  if(gg->GetN() >= 2)
+    {
+      gg->Fit("pol1","Q");
+      TF1 *ff = (TF1*)gg->GetFunction("pol1");
+      fFitPar0 = ff->GetParameter(0);
+      fFitPar1 = ff->GetParameter(1);
+      te_par0->SetText(TString::Format("%0.6f",fFitPar0).Data());
+      te_par1->SetText(TString::Format("%0.6f",fFitPar1).Data());
+      // std::cout<<fFitPar0<<"  "<<fFitPar1<<std::endl;
+    }
+            
+  delete gg;
 }
 
 void caliMainFrame::CaliRun()
 {
-  if(fComCaliChoose->GetSelected()==0)
+
+  switch(fComCaliChoose->GetSelected())
     {
-      TGraph *gg = new TGraph;
-      for (int i = 0; i < CALIPOINTNUMBER; ++i)
-	{
-	  if(coordxycb[i]->IsOn())
-	    {
-	      TString xx(coordx[i]->GetText());
-	      TString yy(coordy[i]->GetText());
-	      std::cout<<xx.Atof()<<"  "<<yy.Atof()<<std::endl;
-		
-	      gg->SetPoint(gg->GetN(),xx.Atof(),yy.Atof());
-	    }
-	}
-      if(gg->GetN() >= 2)
-	{
-	  gg->Fit("pol1","Q");
-	  TF1 *ff = (TF1*)gg->GetFunction("pol1");
-	  fFitPar0 = ff->GetParameter(0);
-	  fFitPar1 = ff->GetParameter(1);
-	  te_par0->SetText(TString::Format("%0.6f",fFitPar0).Data());
-	  te_par1->SetText(TString::Format("%0.6f",fFitPar1).Data());
-	  // std::cout<<fFitPar0<<"  "<<fFitPar1<<std::endl;
-	}
-            
-      delete gg;
+    case 0:
+      FitData();
+      break;
+    case 1:
+      autocali = new AutoCali(fHist1,1);
+      autocali->SearchPeak();
+      // FitData();
+
+      delete autocali;
+      break;
+    case 2:
+      std::cout<<"Not implemented!"<<std::endl;
+      break;
+    case 3:
+      std::cout<<"Not implemented!"<<std::endl;
+      break;
+    default:
+      break;
     }
 }
 
 // 
 // caliMainFrame.cc ends here
+
+
+
+
+
+

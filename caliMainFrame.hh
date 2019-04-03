@@ -4,13 +4,15 @@
 // Author: Hongyi Wu(吴鸿毅)
 // Email: wuhongyi@qq.com 
 // Created: 六 2月  9 21:18:05 2019 (+0800)
-// Last-Updated: 日 2月 10 19:27:43 2019 (+0800)
+// Last-Updated: 三 4月  3 21:20:08 2019 (+0800)
 //           By: Hongyi Wu(吴鸿毅)
-//     Update #: 17
+//     Update #: 19
 // URL: http://wuhongyi.cn 
 
 #ifndef _CALIMAINFRAME_H_
 #define _CALIMAINFRAME_H_
+
+#include "AutoCali.hh"
 
 #include "TGButton.h"
 #include "TGButtonGroup.h"
@@ -56,7 +58,8 @@ public:
 private:
   void MainFrame();
   bool ReadMCA(TString s);
-  
+
+  void FitData();
 protected:
   TGLabel  *coordinate1;
   TGLabel  *coordinate2;
@@ -81,6 +84,9 @@ protected:
   TH1D *fHist2;
   Double_t fFitPar0;
   Double_t fFitPar1;
+
+  AutoCali *autocali;
+  
   ClassDef(caliMainFrame, 1);
 };
 
