@@ -4,9 +4,9 @@
 // Author: Hongyi Wu(吴鸿毅)
 // Email: wuhongyi@qq.com 
 // Created: 六 2月  9 21:18:25 2019 (+0800)
-// Last-Updated: 三 4月  3 21:33:56 2019 (+0800)
+// Last-Updated: 三 4月  3 22:57:57 2019 (+0800)
 //           By: Hongyi Wu(吴鸿毅)
-//     Update #: 51
+//     Update #: 70
 // URL: http://wuhongyi.cn 
 
 #include "caliMainFrame.hh"
@@ -357,8 +357,9 @@ void caliMainFrame::DrawEnergySpectrum()
 
 void caliMainFrame::DoCombo(Int_t id)
 {
-  std::cout<<id<<std::endl;
-  std::cout<<"This feature is currently invalid!"<<std::endl;
+  std::cout<<"Combo ID: "<<id<<std::endl;
+  if(id>1)
+    std::cout<<"This feature is currently invalid!"<<std::endl;
 }
 
 void caliMainFrame::FitData()
@@ -370,7 +371,7 @@ void caliMainFrame::FitData()
 	{
 	  TString xx(coordx[i]->GetText());
 	  TString yy(coordy[i]->GetText());
-	  std::cout<<xx.Atof()<<"  "<<yy.Atof()<<std::endl;
+	  // std::cout<<xx.Atof()<<"  "<<yy.Atof()<<std::endl;
 		
 	  gg->SetPoint(gg->GetN(),xx.Atof(),yy.Atof());
 	}
@@ -383,7 +384,7 @@ void caliMainFrame::FitData()
       fFitPar1 = ff->GetParameter(1);
       te_par0->SetText(TString::Format("%0.6f",fFitPar0).Data());
       te_par1->SetText(TString::Format("%0.6f",fFitPar1).Data());
-      // std::cout<<fFitPar0<<"  "<<fFitPar1<<std::endl;
+      std::cout<<"Fit result: "<<fFitPar0<<"  "<<fFitPar1<<std::endl;
     }
             
   delete gg;
@@ -391,7 +392,8 @@ void caliMainFrame::FitData()
 
 void caliMainFrame::CaliRun()
 {
-
+  int nump = 0;
+  
   switch(fComCaliChoose->GetSelected())
     {
     case 0:
@@ -400,7 +402,27 @@ void caliMainFrame::CaliRun()
     case 1:
       autocali = new AutoCali(fHist1,1);
       autocali->SearchPeak();
-      // FitData();
+
+      for (int i = 0; i < CALIPOINTNUMBER; ++i)
+	{
+	  coordxycb[i]->SetOn(false);
+	}
+      // 
+      for (int j = 0; j < 8; ++j)
+      	{
+      	  bool tempf;
+      	  double tempx,tempy;
+      	  autocali->GetEu152Pars(j,&tempf,&tempx,&tempy);
+      	  // std::cout<<i<<"  "<<tempf<<"  "<<tempx<<"  "<<tempy<<std::endl;
+      	  if(tempf)
+      	    {
+	      coordxycb[nump]->SetOn(true);
+      	      coordx[nump]->SetText(TString::Format("%0.3f",tempx).Data());
+      	      coordy[nump]->SetText(TString::Format("%0.3f",tempy).Data());
+      	      nump++;
+      	    }
+      	}
+      FitData();
 
       delete autocali;
       break;

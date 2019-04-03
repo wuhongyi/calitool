@@ -4,9 +4,9 @@
 // Author: Hongyi Wu(吴鸿毅)
 // Email: wuhongyi@qq.com 
 // Created: 三 4月  3 20:41:16 2019 (+0800)
-// Last-Updated: 三 4月  3 21:51:34 2019 (+0800)
+// Last-Updated: 三 4月  3 22:57:57 2019 (+0800)
 //           By: Hongyi Wu(吴鸿毅)
-//     Update #: 7
+//     Update #: 14
 // URL: http://wuhongyi.cn 
 
 #include "AutoCali.hh"
@@ -58,18 +58,35 @@ bool AutoCali::SearchPeak()
       nfound = spec->Search(realhist,4,"",PeaksThreshold);
       if(nfound > NoPeaks) PeaksThreshold += 0.005;
       else PeaksThreshold -= 0.005;
-      if(PeaksThreshold < 0 || nfound <= NoPeaks/*|| TMath::Abs(nfound-NoPeaks)<3 */) break;
+      if(PeaksThreshold < 0 || nfound <= NoPeaks) break;
       nloop++;
     }
 
+  xpeaks = spec->GetPositionX();
+  ypeaks = spec->GetPositionY();
+  // for (int i = 0; i < nfound; ++i)
+  //   {
+  //     std::cout<<i<<"  "<<xpeaks[i]<<"  "<<ypeaks[i]<<std::endl;
+  //   }
 
-  Double_t *xpeaks = spec->GetPositionX();
-  Double_t *ypeaks = spec->GetPositionY();
-  for (int i = 0; i < nfound; ++i)
+  if(sourceflag == 1)
     {
-      std::cout<<i<<"  "<<xpeaks[i]<<"  "<<ypeaks[i]<<std::endl;
-    }
+      FlagEu152(nfound);
 
+      // for (int i = 0; i < COUNTERMAX; ++i)
+      // 	{
+      // 	  if(fPeakFlag[i])
+      // 	    std::cout<<"result: "<<fPeak[i]<<"  "<<Eu152[i]<<std::endl;
+      // 	}
+    }
+  
+
+  return true;
+  
+}
+
+void AutoCali::FlagEu152(int n)
+{
   double tempcalik;
   double tempcalib;
   if(xpeaks[0] < xpeaks[1])
@@ -82,25 +99,50 @@ bool AutoCali::SearchPeak()
       tempcalik = (344.28-121.78)/(xpeaks[0]-xpeaks[1]);
       tempcalib = 121.78-tempcalik*xpeaks[1];
     }
-  std::cout<<tempcalib<<"  "<<tempcalik<<std::endl;
-  
+  // std::cout<<tempcalib<<"  "<<tempcalik<<std::endl;
 
-  return true;
+  for (int i = 0; i < n; ++i)
+    {
+      double tempenergy = tempcalik*xpeaks[i]+tempcalib;
+     for (int j = 0; j < 8; ++j)
+       {
+	 if(tempenergy > Eu152[j]-5 && tempenergy < Eu152[j]+5)
+	   {
+	     Double_t fitleft,fitright;
+	     for (int k = xpeaks[i]; k > 0; --k)
+	       {
+		 if(realhist->GetBinContent(k) < 0.5*ypeaks[i])
+		   {
+		     fitleft = k;
+		     break;
+		   }
+	       }
+	     for (int k = xpeaks[i]; k < realhist->GetNbinsX(); ++k)
+	       {
+		 if(realhist->GetBinContent(k) < 0.3*ypeaks[i])
+		   {
+		     fitright = k;
+		     break;
+		   }
+	       }
+
+	     realhist->Fit("gaus","Q0","",fitleft,fitright);
+	     TF1 *ff = (TF1*)realhist->GetFunction("gaus");
+	     fPeak[j] = ff->GetParameter(1);;
+	     fPeakFlag[j] = true;
+	   }
+       }
+      
+    }
   
 }
 
-
-
-
+void AutoCali::GetEu152Pars(int n,bool *f,double *x,double *y)
+{
+  *f = fPeakFlag[n];
+  *x = fPeak[n];
+  *y = Eu152[n];
+}
 
 // 
 // AutoCali.cc ends here
-
-
-
-
-
-
-
-
-
