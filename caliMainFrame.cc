@@ -4,9 +4,9 @@
 // Author: Hongyi Wu(吴鸿毅)
 // Email: wuhongyi@qq.com 
 // Created: 六 2月  9 21:18:25 2019 (+0800)
-// Last-Updated: 三 4月  3 22:57:57 2019 (+0800)
+// Last-Updated: 四 4月  4 21:09:38 2019 (+0800)
 //           By: Hongyi Wu(吴鸿毅)
-//     Update #: 70
+//     Update #: 72
 // URL: http://wuhongyi.cn 
 
 #include "caliMainFrame.hh"
@@ -85,6 +85,8 @@ void caliMainFrame::MainFrame()
   fComCaliChoose->AddEntry("Eu152",1);
   fComCaliChoose->AddEntry("Co60",2);
   fComCaliChoose->AddEntry("Ba133",3);
+  fComCaliChoose->AddEntry("Am241",4);
+  fComCaliChoose->AddEntry("Pu239",5);
   fComCaliChoose->Select(0);
   fComCaliChoose->Connect("Selected(Int_t)","caliMainFrame", this, "DoCombo(Int_t)");
   fComCaliChoose->Resize(100,20);
@@ -432,16 +434,17 @@ void caliMainFrame::CaliRun()
     case 3:
       std::cout<<"Not implemented!"<<std::endl;
       break;
+    case 4:
+      std::cout<<"Not implemented!"<<std::endl;
+      break;
+    case 5:
+      std::cout<<"Not implemented!"<<std::endl;
+      break;
     default:
+      std::cout<<"Not implemented!"<<std::endl;
       break;
     }
 }
 
 // 
 // caliMainFrame.cc ends here
-
-
-
-
-
-
