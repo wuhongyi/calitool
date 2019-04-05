@@ -4,9 +4,9 @@
 // Author: Hongyi Wu(吴鸿毅)
 // Email: wuhongyi@qq.com 
 // Created: 六 2月  9 21:18:05 2019 (+0800)
-// Last-Updated: 三 4月  3 21:20:08 2019 (+0800)
+// Last-Updated: 五 4月  5 09:03:58 2019 (+0800)
 //           By: Hongyi Wu(吴鸿毅)
-//     Update #: 19
+//     Update #: 20
 // URL: http://wuhongyi.cn 
 
 #ifndef _CALIMAINFRAME_H_
@@ -66,6 +66,9 @@ protected:
   TRootEmbeddedCanvas *fEcanvas1;
   TRootEmbeddedCanvas *fEcanvas2;
 
+  TGHorizontalFrame *channelminmaxframe;
+  TGTextEntry *channelmin,*channelmax;
+  
   TGComboBox *fComCaliChoose;
   TGHorizontalFrame *coorxydframe[CALIPOINTNUMBER];
   TGCheckButton *coordxycb[CALIPOINTNUMBER];
@@ -93,6 +96,3 @@ protected:
 #endif /* _CALIMAINFRAME_H_ */
 // 
 // caliMainFrame.hh ends here
-
-
-

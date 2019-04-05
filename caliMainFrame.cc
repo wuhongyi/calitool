@@ -4,9 +4,9 @@
 // Author: Hongyi Wu(吴鸿毅)
 // Email: wuhongyi@qq.com 
 // Created: 六 2月  9 21:18:25 2019 (+0800)
-// Last-Updated: 四 4月  4 21:09:38 2019 (+0800)
+// Last-Updated: 五 4月  5 13:33:09 2019 (+0800)
 //           By: Hongyi Wu(吴鸿毅)
-//     Update #: 72
+//     Update #: 77
 // URL: http://wuhongyi.cn 
 
 #include "caliMainFrame.hh"
@@ -70,6 +70,15 @@ void caliMainFrame::MainFrame()
   v11frame->AddFrame(bt_exit, new TGLayoutHints(kLHintsExpandX, 4, 4, 10, 0));
   bt_exit->SetToolTipText("Terminate the application", 200);
 
+  TGLabel *label11 = new TGLabel(v11frame, "MIN  /  MAX"); //Devided by space
+  v11frame->AddFrame(label11, new TGLayoutHints(kLHintsExpandX, 4, 4, 50, 0));
+  channelminmaxframe = new TGHorizontalFrame(v11frame, 100, 40);
+  v11frame->AddFrame(channelminmaxframe, new TGLayoutHints(kLHintsExpandX, 0, 0, 0, 0));
+  channelmin = new TGTextEntry(channelminmaxframe, "0");
+  channelminmaxframe->AddFrame(channelmin, new TGLayoutHints(kLHintsExpandX, 1, 1, 1, 0));
+  channelmax = new TGTextEntry(channelminmaxframe, "65536");
+  channelminmaxframe->AddFrame(channelmax, new TGLayoutHints(kLHintsExpandX, 1, 1, 1, 0)); 
+  
   // v12
   fEcanvas1 = new TRootEmbeddedCanvas("ECanvas1", v12frame, 200, 200);
   v12frame->AddFrame(fEcanvas1, new TGLayoutHints(kLHintsExpandX | kLHintsExpandY, 0, 0, 0, 0));
@@ -251,10 +260,16 @@ bool caliMainFrame::ReadMCA(TString s)
       int count;
       fHist1 = new TH1D("fHist1","",Channel,0,Channel);
       fHist1->GetXaxis()->SetTitle("channel");
+
+      TString strchmin(channelmin->GetText());
+      TString strchmax(channelmax->GetText());
+      int chmin = strchmin.Atoi();
+      int chmax = strchmax.Atoi();
       for (int i = 0; i < Channel; ++i)
 	{
 	  mcafile>>count;
 	  // cout<<i<<"  "<<count<<endl;
+	  if(i<chmin || i>chmax) continue;
 	  for (int j = 0; j < count; ++j)
 	    {
 	      fHist1->Fill(i);
