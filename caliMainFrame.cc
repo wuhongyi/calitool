@@ -4,9 +4,9 @@
 // Author: Hongyi Wu(吴鸿毅)
 // Email: wuhongyi@qq.com 
 // Created: 六 2月  9 21:18:25 2019 (+0800)
-// Last-Updated: 五 4月  5 13:33:09 2019 (+0800)
+// Last-Updated: 四 4月 18 18:29:03 2019 (+0800)
 //           By: Hongyi Wu(吴鸿毅)
-//     Update #: 77
+//     Update #: 79
 // URL: http://wuhongyi.cn 
 
 #include "caliMainFrame.hh"
@@ -413,10 +413,11 @@ void caliMainFrame::CaliRun()
   
   switch(fComCaliChoose->GetSelected())
     {
-    case 0:
+    case 0://Manual
       FitData();
       break;
-    case 1:
+    case 1://EU152
+      if(autocali != NULL) delete autocali;
       autocali = new AutoCali(fHist1,1);
       autocali->SearchPeak();
 
@@ -443,16 +444,41 @@ void caliMainFrame::CaliRun()
 
       delete autocali;
       break;
-    case 2:
+    case 2://Co60
+      if(autocali != NULL) delete autocali;
+      autocali = new AutoCali(fHist1,2);
+      autocali->SearchPeak();
+
+      for (int i = 0; i < CALIPOINTNUMBER; ++i)
+	{
+	  coordxycb[i]->SetOn(false);
+	}
+
+      for (int j = 0; j < 2; ++j)
+      	{
+      	  bool tempf;
+      	  double tempx,tempy;
+      	  autocali->GetCo60Pars(j,&tempf,&tempx,&tempy);
+      	  // std::cout<<i<<"  "<<tempf<<"  "<<tempx<<"  "<<tempy<<std::endl;
+      	  if(tempf)
+      	    {
+	      coordxycb[nump]->SetOn(true);
+      	      coordx[nump]->SetText(TString::Format("%0.3f",tempx).Data());
+      	      coordy[nump]->SetText(TString::Format("%0.3f",tempy).Data());
+      	      nump++;
+      	    }
+      	}
+      FitData();
+
+      delete autocali;
+      break;
+    case 3://Ba133
       std::cout<<"Not implemented!"<<std::endl;
       break;
-    case 3:
+    case 4://Am241
       std::cout<<"Not implemented!"<<std::endl;
       break;
-    case 4:
-      std::cout<<"Not implemented!"<<std::endl;
-      break;
-    case 5:
+    case 5://Pu239
       std::cout<<"Not implemented!"<<std::endl;
       break;
     default:

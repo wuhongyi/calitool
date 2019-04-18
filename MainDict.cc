@@ -218,7 +218,7 @@ namespace {
     };
     static const char* includePaths[] = {
 "/opt/root61206/include",
-"/home/wuhongyi/workgithub/calitool/",
+"/run/media/wuhongyi/wuhongyidata/SouthAfrica/workgithub/calitool/",
 0
     };
     static const char* fwdDeclCode = R"DICTFWDDCLS(
