@@ -4,9 +4,9 @@
 // Author: Hongyi Wu(吴鸿毅)
 // Email: wuhongyi@qq.com 
 // Created: 六 2月  9 21:18:25 2019 (+0800)
-// Last-Updated: 四 4月 18 18:29:03 2019 (+0800)
+// Last-Updated: 六 11月 28 21:47:15 2020 (+0800)
 //           By: Hongyi Wu(吴鸿毅)
-//     Update #: 79
+//     Update #: 83
 // URL: http://wuhongyi.cn 
 
 #include "caliMainFrame.hh"
@@ -96,6 +96,7 @@ void caliMainFrame::MainFrame()
   fComCaliChoose->AddEntry("Ba133",3);
   fComCaliChoose->AddEntry("Am241",4);
   fComCaliChoose->AddEntry("Pu239",5);
+  fComCaliChoose->AddEntry("3 alpha",6);
   fComCaliChoose->Select(0);
   fComCaliChoose->Connect("Selected(Int_t)","caliMainFrame", this, "DoCombo(Int_t)");
   fComCaliChoose->Resize(100,20);
@@ -174,6 +175,9 @@ void caliMainFrame::MainFrame()
   fComBinChoose->AddEntry("4 MeV / 0.5 keV",4);
   fComBinChoose->AddEntry("4 MeV / 1.0 keV",5);
   fComBinChoose->AddEntry("4 MeV / 2.0 keV",6);
+  fComBinChoose->AddEntry("6 MeV / 1.0 keV",7);
+  fComBinChoose->AddEntry("6 MeV / 2.0 keV",8);
+  fComBinChoose->AddEntry("6 MeV / 5.0 keV",9);
   fComBinChoose->Select(0);
   fComBinChoose->Resize(100,20);
 
@@ -345,7 +349,15 @@ void caliMainFrame::DrawEnergySpectrum()
     case 6:
       fHist2 = new TH1D("fHist2","",2000,0,4000);
       break;
-
+    case 7:
+      fHist2 = new TH1D("fHist2","",6000,0,6000);
+      break;
+    case 8:
+      fHist2 = new TH1D("fHist2","",3000,0,6000);
+      break;
+    case 9:
+      fHist2 = new TH1D("fHist2","",1200,0,6000);
+      break;
     default:
       std::cout<<"undefine!!!"<<std::endl;
       break;
@@ -479,6 +491,9 @@ void caliMainFrame::CaliRun()
       std::cout<<"Not implemented!"<<std::endl;
       break;
     case 5://Pu239
+      std::cout<<"Not implemented!"<<std::endl;
+      break;
+    case 6://3 alpha
       std::cout<<"Not implemented!"<<std::endl;
       break;
     default:

@@ -4,9 +4,9 @@
 // Author: Hongyi Wu(吴鸿毅)
 // Email: wuhongyi@qq.com 
 // Created: 三 4月  3 20:41:16 2019 (+0800)
-// Last-Updated: 四 4月 18 18:33:01 2019 (+0800)
+// Last-Updated: 六 11月 28 21:40:30 2020 (+0800)
 //           By: Hongyi Wu(吴鸿毅)
-//     Update #: 19
+//     Update #: 20
 // URL: http://wuhongyi.cn 
 
 #include "AutoCali.hh"
@@ -49,6 +49,11 @@ AutoCali::AutoCali(TH1D *h, int flag)
     {
 
     }
+  else if(sourceflag == 6)
+    {
+
+    }
+
   
 }
 
@@ -111,7 +116,10 @@ bool AutoCali::SearchPeak()
     {
 
     }
-  
+  else if(sourceflag == 6)
+    {
+
+    }  
 
   return true;
 }

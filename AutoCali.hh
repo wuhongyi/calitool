@@ -4,9 +4,9 @@
 // Author: Hongyi Wu(吴鸿毅)
 // Email: wuhongyi@qq.com 
 // Created: 三 4月  3 20:40:58 2019 (+0800)
-// Last-Updated: 四 4月 18 18:26:39 2019 (+0800)
+// Last-Updated: 六 11月 28 21:40:30 2020 (+0800)
 //           By: Hongyi Wu(吴鸿毅)
-//     Update #: 8
+//     Update #: 9
 // URL: http://wuhongyi.cn 
 
 #ifndef _AUTOCALI_H_
@@ -24,6 +24,7 @@
 // flag 3 == Ba133
 // flag 4 == Am241
 // flag 5 == Pu239
+// flag 6 == 3 alpha
 #define COUNTERMAX 20
 
 class AutoCali
@@ -64,6 +65,8 @@ protected:
   // Co60
   // 0->1173.2  1->1332.5
   double Co60[2] = {1173.2,1332.5};
+  // 3 alpha
+  double alpha3[3]= {5156.59,5485.56,5804.77};
   
 };
 
